@@ -5,6 +5,8 @@ import (
     "math/rand"
 )
 
+
+
 var deck = []string{
 	"A", "A", "A", "A", 
 	"K", "K", "K", "K", 
@@ -21,37 +23,76 @@ var deck = []string{
 	"2", "2", "2", "2",
 }
 
-var dealerHand []string
-var yourHand []string
+var cardToValue = map[string]int{
+    "A": 11,
+	"K": 10,
+	"Q": 10,
+	"J": 10,
+	"10": 10,
+	"9": 9,
+	"8": 8,
+	"7": 7,
+	"6": 6,
+	"5": 5,
+	"4": 4,
+	"3": 3,
+	"2": 2,
+}
 
 func main() {
 	shuffledDeck := shuffle(deck)
 	var card string
+	
+	var dealerHand []string
+	var yourHand []string
+
+	card, shuffledDeck = draw(shuffledDeck, 0)
+	yourHand = append(yourHand, card)
+	
+	card, shuffledDeck = draw(shuffledDeck, 0)
+	dealerHand = append(dealerHand, card)
+	
+	card, shuffledDeck = draw(shuffledDeck, 0)
+	yourHand = append(yourHand, card)
 
 	card, shuffledDeck = draw(shuffledDeck, 0)
 	dealerHand = append(dealerHand, card)
-	card, shuffledDeck = draw(shuffledDeck, 0)
-	yourHand = append(yourHand, card)
-	card, shuffledDeck = draw(shuffledDeck, 0)
-	dealerHand = append(dealerHand, card)
-	card, shuffledDeck = draw(shuffledDeck, 0)
-	yourHand = append(yourHand, card)
-	fmt.Printf( "Dealer's hand: %s\n Your hand: %s\n", dealerHand, yourHand)
+
+	dealerHandToDisplay := make([]string, len(dealerHand))
+	
+	for cardIdx := range dealerHandToDisplay {
+        dealerHandToDisplay[cardIdx] = "?"
+    }
+
+	dealerHandToDisplay[0] = dealerHand[0]
+
+	fmt.Printf( "Dealer's hand:\t%s\tevaluation: %d\n", dealerHandToDisplay, evaluateHand(dealerHand))
+	fmt.Printf( "Your hand:    \t%s\tevaluation: %d\n", yourHand, evaluateHand(yourHand))
 }
 
-func draw(deck []string, card_idx int) (string, []string) {
+func draw(deck []string, cardIdx int) (string, []string) {
 	switch {
-	case card_idx == 0:
-		card := deck[card_idx]
+	case cardIdx == 0:
+		card := deck[cardIdx]
 		return card, deck[1:]
-	case card_idx == len(deck) - 1:
-		card := deck[card_idx]
-		return card, deck[:card_idx]
-	case card_idx > len(deck) - 1 || card_idx < 0:  
-		panic(fmt.Sprintf("card_idx [%d] is out of range for deck %s", card_idx, deck))
+	case cardIdx == len(deck) - 1:
+		card := deck[cardIdx]
+		return card, deck[:cardIdx]
+	case cardIdx > len(deck) - 1 || cardIdx < 0:  
+		panic(fmt.Sprintf("cardIdx [%d] is out of range for deck %s", cardIdx, deck))
 	}
-	card := deck[card_idx]
-	return card, append(deck[0:card_idx], deck[card_idx+1:]...) 
+	card := deck[cardIdx]
+	return card, append(deck[0:cardIdx], deck[cardIdx+1:]...) 
+}
+
+
+
+func evaluateHand(hand []string) int {
+	result := 0
+	for cardIdx := range hand {
+		result += cardToValue[hand[cardIdx]]
+	}
+	return result
 }
 
 func shuffle(deck []string) []string {
@@ -66,4 +107,3 @@ func shuffle(deck []string) []string {
 
 	return shuffledDeck
 }
-
