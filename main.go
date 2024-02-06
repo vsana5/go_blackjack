@@ -1,6 +1,9 @@
 package main
 
-import "fmt"
+import (
+    "fmt"
+    "math/rand"
+)
 
 var deck = []string{
 	"A", "A", "A", "A", 
@@ -18,17 +21,22 @@ var deck = []string{
 	"2", "2", "2", "2",
 }
 
+var dealerHand []string
+var yourHand []string
+
 func main() {
-	gameDeck := make([]string, 52)
+	shuffledDeck := shuffle(deck)
+	var card string
 
-	copy(gameDeck, deck)
-
-	for len(gameDeck) > 0 {
-		var card string
-		card, gameDeck = draw(gameDeck, len(gameDeck) - 1)
-		fmt.Printf( "%s, %s\n", card, gameDeck)
-	}
-	fmt.Println("The End")
+	card, shuffledDeck = draw(shuffledDeck, 0)
+	dealerHand = append(dealerHand, card)
+	card, shuffledDeck = draw(shuffledDeck, 0)
+	yourHand = append(yourHand, card)
+	card, shuffledDeck = draw(shuffledDeck, 0)
+	dealerHand = append(dealerHand, card)
+	card, shuffledDeck = draw(shuffledDeck, 0)
+	yourHand = append(yourHand, card)
+	fmt.Printf( "Dealer's hand: %s\n Your hand: %s\n", dealerHand, yourHand)
 }
 
 func draw(deck []string, card_idx int) (string, []string) {
@@ -44,4 +52,18 @@ func draw(deck []string, card_idx int) (string, []string) {
 	}
 	card := deck[card_idx]
 	return card, append(deck[0:card_idx], deck[card_idx+1:]...) 
-} 
+}
+
+func shuffle(deck []string) []string {
+	shuffledDeck := make([]string, len(deck))
+
+	copy(shuffledDeck, deck)
+
+	for i := range shuffledDeck {
+		j := rand.Intn(i + 1)
+		shuffledDeck[i], shuffledDeck[j] = shuffledDeck[j], shuffledDeck[i]
+	}
+
+	return shuffledDeck
+}
+
