@@ -3,26 +3,30 @@ package main
 import "fmt"
 
 var deck = []string{
-	"A", 
-	"K", 
-	"Q",
-	"J",
-	"10",
-	"9",
-	"8",
-	"7",
-	"6",
-	"5",
-	"4",
-	"3",
-	"2",
+	"A", "A", "A", "A", 
+	"K", "K", "K", "K", 
+	"Q", "Q", "Q", "Q",
+	"J", "J", "J", "J",
+	"10", "10", "10", "10",
+	"9", "9", "9", "9",
+	"8", "8", "8", "8",
+	"7", "7", "7", "7",
+	"6", "6", "6", "6",
+	"5", "5", "5", "5",
+	"4", "4", "4", "4",
+	"3", "3", "3", "3",
+	"2", "2", "2", "2",
 }
 
 func main() {
-	for len(deck) > 0 {
+	gameDeck := make([]string, 52)
+
+	copy(gameDeck, deck)
+
+	for len(gameDeck) > 0 {
 		var card string
-		card, deck = draw(deck, len(deck) - 1)
-		fmt.Printf( "%s, %s\n", card, deck)
+		card, gameDeck = draw(gameDeck, len(gameDeck) - 1)
+		fmt.Printf( "%s, %s\n", card, gameDeck)
 	}
 	fmt.Println("The End")
 }
