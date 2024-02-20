@@ -31,23 +31,7 @@ func (hand *Hand) Add(card string) {
 }
 
 func (hand *Hand)  Evaluate() int {
-	result := 0
-
-	acesCount := 0
-
-	for cardIdx := range hand.cards {
-		card := hand.cards[cardIdx]
-		if card == "A" {
-			acesCount++
-		}
-		result += cardToValue[card]
-	}
-
-	if result > 21 && acesCount > 0 {
-		result -= min((result-12)/10, acesCount) * 10
-	}
-
-	return result
+	return -1
 }
 
 func min(a, b int) int {
