@@ -22,16 +22,22 @@ var cardToValue = map[string]int{
 }
 
 type Hand struct {
-	isOpen bool 
-	cards []string
+	isOpen bool
+	cards  []string
 }
 
 func (hand *Hand) Add(card string) {
 	hand.cards = append(hand.cards, card)
 }
 
-func (hand *Hand)  Evaluate() int {
-	return -1
+func (hand *Hand) Evaluate() int {
+	var handsum int = 0
+
+	for cardnum := 0; cardnum < len(hand.cards); cardnum++ {
+		handsum += cardToValue[hand.cards[cardnum]]
+	}
+
+	return handsum
 }
 
 func min(a, b int) int {
@@ -42,8 +48,8 @@ func min(a, b int) int {
 }
 
 func (hand Hand) String() string {
-	if(hand.isOpen) {
-		return fmt.Sprintf("[%s](%d)", strings.Join(hand.cards, ", "), hand.Evaluate())	
+	if hand.isOpen {
+		return fmt.Sprintf("[%s](%d)", strings.Join(hand.cards, ", "), hand.Evaluate())
 	}
 	return fmt.Sprintf("[%s](?)", strings.Join(hand.hideAllButFirst(), ", "))
 }
